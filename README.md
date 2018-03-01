@@ -1,6 +1,6 @@
 # NAME
 
-Tag::DeCoder - Serialization/Deserialization with
+Tag::DeCoder - Minimalistic functional interface for consensual serialization/deserialization
 
 # SYNOPSIS
 
