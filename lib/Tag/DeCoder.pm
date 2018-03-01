@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 package Tag::DeCoder;
+use 5.16.1;
 use strict;
 use utf8;
 
@@ -8,13 +9,15 @@ use Exporter qw(import);
 our @EXPORT=our @EXPORT_OK=qw(decodeByTag encodeByTag);
 
 my %knownTags;
-
 sub get_coder_by_tag {
-    $knownTags{$_[0]}//=eval sprintf('require Tag::DeCoder::%s; Tag::DeCoder::%s->new', $_[0], $_[0]) or die sprintf('Cant attach coder module for tag %s: %s', $_[0], $@)
+    state $rxTagFmt=qr/^[A-Z](?:[A-Z0-9]{1,2})?$/;
+    ($_[0] =~ $rxTagFmt) or die 'Wrong tag name <<'.$_[0].'>>. It must match regular expression: /^[A-Z]([A-Z0-9]{1,2})?$/';
+    $knownTags{$_[0]} //= eval sprintf('require Tag::DeCoder::%s; Tag::DeCoder::%s->new', ($_[0]) x 2) 
+        or die sprintf('Cant attach coder module for tag <<%s>>: %s', $_[0], $@)
 }
 
 sub decodeByTag {
-    die 'Insufficient amount of arguments' unless defined $_[0];
+    die 'Insufficient amount of arguments number' unless defined $_[0];
     return $_[0] unless my $tags=($_[0]=~m/^\{([A-Z\d:]+)\}/)[0];
     if (index($tags, ':')>0) {
         my $data=\(substr($_[0], 2+length($tags)));
@@ -30,7 +33,7 @@ sub decodeByTag {
 }
 
 sub encodeByTag {
-    $#_ or die 'Insufficient amount of arguments';
+    $#_ or die 'Insufficient amount of arguments number';
     my @tags=map split(/,/ => $_), @_[-@_..-2];
     if ($#tags) {
         my $data=$_[-1];
