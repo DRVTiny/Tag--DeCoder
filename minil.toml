@@ -1,0 +1,4 @@
+name = "Tag-DeCoder"
+# badges = ["travis"]
+module_maker="ModuleBuildTiny"
+
