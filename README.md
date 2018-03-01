@@ -4,7 +4,7 @@ Tag::DeCoder - Serialization/Deserialization with
 
 # SYNOPSIS
 
-    use Tag::::DeCoder;
+    use Tag::DeCoder;
     
     my $encoded = encodeByTag('CB' => {'my' => {'name' => ['Andrey', 'Alexandrovich'], 'surname' => 'Konovalov'}});
     my $decoded = decodeByTag($encoded);
