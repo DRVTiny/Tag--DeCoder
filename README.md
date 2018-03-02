@@ -29,22 +29,24 @@ so you dont need to load anything except Tag::DeCoder (and, of course, you have 
 
 Basically Tag::DeCoder provides only few coders/decoders:
 
-* CB - for CBOR. Inherits all methods from CBOR::XS package for CBOR coding and decoding (compact binary JSON-like
-  format). 
-* JS - for JSON; Inherits all methods from JSON::XS package for JSON coding and
-  decoding.
-* MP - for MessagePack; Uses Data::MessagePack as base, implements encode
+* **CB** - for CBOR. Inherits all methods from [CBOR::XS package](https://metacpan.org/pod/CBOR::XS) for [CBOR](http://cbor.io/) coding and decoding
+* **JS** - for JSON; Inherits all methods from [JSON::XS package](https://metacpan.org/pod/JSON::XS) for JSON coding and decoding.
+* **MP** - for MessagePack; Uses [Data::MessagePack package](https://metacpan.org/pod/Data::MessagePack) as base, implements encode
   and decode methods as pseudonames for pack/unpack functions from the base
   package
-* I - simplest native Perl-coding of UInt32 sequences such as [12,70819,1e+6]
-* II - native Perl implementation for Array of Arrays of UInt32, such as [[12,70819,1e+6],[167657,890]]
-* B64 - Base64 coding/decoding, uses MIME::Base64 as base (contains XS code)
-* Z - compressing with Compress::Zlib
+* **SER** - for Sereal. According to [Sereal](https://metacpan.org/pod/Sereal) documentation, internally uses fast function calls 
+  to sereal_encode_with_object and sereal_decode_with_object instead of OOP interface
+* **I** - simplest native Perl-coding of UInt32 sequences such as [12,70819, 1e+6]
+* **II** - native Perl implementation for Array of Arrays of UInt32, such as [ [12, 70819, 1e+6], [167657, 890] ]
+* **B64** - for Base64 coding/decoding. Uses [MIME::Base64](https://metacpan.org/pod/MIME::Base64) as base (which contains fast XS code)
+* **Z** -  to get "zipped" version of your data. Uses [Compress::Zlib](https://metacpan.org/pod/Compress::Zlib) in very straightforward manner :)
 
-To write your own Tag decoder/encoder you must create package Tag::DeCoder::{TAG} where TAG name is 1 to 3
+To write your own "tagged" serialization helper, you must create package Tag::DeCoder::{TAG} where TAG name is 1 to 3
 characters long and may contain only this symbols: [A-Z] for the first letter, [A-Z0-9] for the rest 1 or 2 symbols.
 Your coder must be written as object class and must implement only 2 basic methods: "encode" and "decode".
 It may implement other methods as well.
+
+You may create pull request to include your serialization helper in the Tag::DeCoder source tree
 
 # LICENSE
 
@@ -55,4 +57,4 @@ it under the same terms as Perl itself.
 
 # AUTHOR
 
-Andrey A. Konovalov <drvtiny@gmail.com>
+Andrey Konovalov aka DRVTiny <drvtiny@gmail.com>
