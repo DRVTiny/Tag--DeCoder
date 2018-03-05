@@ -3,6 +3,7 @@ package Tag::DeCoder;
 use 5.16.1;
 use strict;
 use utf8;
+use Ref::Util qw(is_hashref);
 
 use Exporter qw(import);
 
@@ -18,33 +19,38 @@ sub get_coder_by_tag {
 
 sub decodeByTag {
     die 'Insufficient amount of arguments number' unless defined $_[0];
-    return $_[0] unless my $tags=($_[0]=~m/^\{([A-Z\d:]+)\}/)[0];
-    if (index($tags, ':')>0) {
-        my $data=\(substr($_[0], 2+length($tags)));
+    return $_[0] unless my $tags = ($_[0]=~m/^\{([A-Z\d:]+)\}/)[0];
+    if (index($tags, ':') > 0) {
+        my $data = \(substr($_[0], 2+length($tags)));
         for my $tag (split /:/ => $tags) {
-            my $coder=get_coder_by_tag($tag);
+            my $coder = get_coder_by_tag($tag);
             defined(eval { $data=\($coder->decode(${$data})) }) or die 'Error when trying to decode: '.$@;
         }
         defined(wantarray) ? return ${$data} : return($_[0]=${$data});
     } else {
-        my $coder=get_coder_by_tag($tags);
-        return defined(wantarray) ? $coder->decode(substr($_[0], 2+length($tags))) : return($_[0]=$coder->decode(substr($_[0], 2+length($tags))));
+        my $coder = get_coder_by_tag($tags);
+        return 
+        defined(wantarray)
+            ? $coder->decode(substr($_[0], 2+length($tags)))
+            : ( $_[0] = $coder->decode(substr($_[0], 2+length($tags))) );
     }
 }
 
 sub encodeByTag {
     $#_ or die 'Insufficient amount of arguments number';
-    my @tags=map split(/,/ => $_), @_[-@_..-2];
+    my @tags = map split(/,/ => $_), @_[-@_..-2];
+    my $nestd = 0;
     if ($#tags) {
-        my $data=$_[-1];
+        my $data = $_[-1];
         for my $tag (@tags) {
             my $coder=get_coder_by_tag($tag);
-            $data=$coder->encode($data)
+            $data=$coder->encode($data, (is_hashref($coder) && $coder->{'params_for_encode'}) ? ($nestd) : ());
+            $nestd++
         }
-        return join('', '{', join(':' => reverse @tags), '}', $data)
+        return join('' => '{', join(':' => reverse @tags), '}', $data)
     } else {
-        my $coder=get_coder_by_tag($_[0]);
-        return join(''=>'{', $_[0], '}', $coder->encode($_[1]))
+        my $coder = get_coder_by_tag($_[0]);
+        return join('' => '{', $_[0], '}', $coder->encode($_[1], (is_hashref($coder) && $coder->{'params_for_encode'}) ? ($nestd) : ()))
     }
 }
 
