@@ -40,6 +40,8 @@ Basically Tag::DeCoder provides only few coders/decoders:
 * **II** - native Perl implementation for Array of Arrays of UInt32, such as [ [12, 70819, 1e+6], [167657, 890] ]
 * **B64** - for Base64 coding/decoding. Uses [MIME::Base64](https://metacpan.org/pod/MIME::Base64) as base (which contains fast XS code)
 * **Z** -  to get "zipped" version of your data. Uses [Compress::Zlib](https://metacpan.org/pod/Compress::Zlib) in very straightforward manner :)
+* **MD5** - prevents data loss or corruption by prefixing your data with md5_hex sum on encode and checking whether md5_hex of data after prefix 
+  is stil equal to the prefix itself on decode
 
 To write your own "tagged" serialization helper, you must create package Tag::DeCoder::{TAG} where TAG name is 1 to 3
 characters long and may contain only this symbols: [A-Z] for the first letter, [A-Z0-9] for the rest 1 or 2 symbols.
