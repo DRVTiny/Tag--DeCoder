@@ -1,6 +1,18 @@
-Revision history for Perl extension Tag--DeCoder
+Revision history for perl distribution Tag::DeCoder
+0.07 2018-03-05T02:10:25-05:00
+ - Fix MD5 issue when the source data contains wide-characters
+ - Add possibility to provide some more parameters for encoders by bless'ing hashref and specifying "params_for_encode" with non-empty value
+-  Switched to using md5_base64 instead of md5_hex (prefix shortening by 10 bytes)
+   Contributor: Andrey Konovalov
 
-{{$NEXT}}
+0.06 2018-03-05T21:03:44-0500
+ - Added support for MD5-signing of the stream
+   Contributor: Andrey Konovalov
 
-    - original version
+0.05 2018-02-28T20:16:11-0500
+ - "Sereal" serializator support added
+   Contributor: Andrey Konovalov
 
+0.04 2017-02-20T09:59:37+0800
+ - In-place modification of variable in case of calling decodeByTag() in a void context
+   Contributor: Andrey Konovalov
