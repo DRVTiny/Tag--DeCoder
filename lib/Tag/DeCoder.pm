@@ -7,6 +7,7 @@ use Ref::Util qw(is_hashref);
 
 use Exporter qw(import);
 
+our $VERSION = '0.07';
 our @EXPORT=our @EXPORT_OK=qw(decodeByTag encodeByTag);
 
 my %knownTags;
