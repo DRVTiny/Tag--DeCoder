@@ -1,9 +1,10 @@
 package Tag::DeCoder::MP;
 use base 'Data::MessagePack';
-my %map_methods=('encode' => 'pack', 'decode' => 'unpack');
-{
-    no strict 'refs';
-    *{__PACKAGE__.'::'.$_}=\&{'Data::MessagePack::'.$map_methods{$_}} for keys %map_methods;
+
+sub new {
+    my $mp = $_[0]->SUPER::new();
+    $mp->canonical->utf8->prefer_integer;
+    $mp
 }
 
 1;
